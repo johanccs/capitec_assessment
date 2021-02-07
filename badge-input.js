@@ -72,7 +72,6 @@
         </style>
 
         <ul></ul>
-
         <input type="email" placeholder="Type or paste email addresses and press 'Enter'...">
         <p hidden></p>  
     `;
@@ -106,6 +105,9 @@
 
         handleKeyDown = (evt) => {
             
+            this._error.setAttribute("hidden", true);
+            this._input.classList.remove("has-error");
+
             if(TRIGGER_KEYS.includes(evt.key)){
                 evt.preventDefault();
 
@@ -114,7 +116,7 @@
                 if(value && this.validate(value)){
                     evt.target.value = " ";
 
-                    this._items.push(value);
+                    this._items.push(value);                                    
                     this.update();
                 }
             }
@@ -140,6 +142,18 @@
             }
 
             return true;
+        }
+
+        update(){            
+            this._list.innerHtml = this._items            
+            .map(function(item){               
+              return `
+                <li>
+                    ${ item }
+                    <button type="button" data-value="${item}">&times;</button>
+                </li>
+              `;
+            }).join("");
         }
 
         isInList(email){
